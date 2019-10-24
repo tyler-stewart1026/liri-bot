@@ -61,15 +61,24 @@ var spotifyThis = function () {
 // ===========================================
 var movieThis = function () {
 
+  // console.log("for loop" + args.length)
+  if (args.length > 3) {
 
-  for (var i = 3; i < args.length; i++) {
+    for (var i = 3; i < args.length; i++) {
+      if (i > 3 && i < args.length) {
+        movieName = movieName + "+" + args[i];
+        // console.log("if movie name")
+      } else {
+        // console.log("else movie name")
+        movieName += args[i];
+      }
 
-    if (i > 3 && i < args.length) {
-      movieName = movieName + "+" + args[i];
-    } else {
-      movieName += args[i];
+
     }
+  } else {
+    movieName = "Mr.Nobody"
   }
+  // console.log("Movie name" + movieName)
 
   queryUrl = ("http://www.omdbapi.com/?t=" + movieName + "&apikey=" + omdb)
   axios.get(queryUrl).then(function (response) {
@@ -102,11 +111,7 @@ var movieThis = function () {
   })
 }
 
-// if(movieName === "") {
-//     movieThis();
-// }else {
-//   movieName === "Mr. Nobody"
-// }
+
 
 var concertThis = function () {
 
@@ -125,12 +130,16 @@ var concertThis = function () {
   axios.get(queryUrl).then(function (response) {
     // console.log(JSON.stringify(response.data, null, 2));
 
+    if (response.data.length === 0) {
+      console.log("Sorry, the band you selected is not touring currently!")
+    }else {
 
-    console.log("Venue name: " + response.data[0].venue.name)
-    console.log("Location: " + response.data[0].venue.city + ", " + response.data[0].venue.region)
+    console.log("\nVenue name: " + response.data[0].venue.name)
+    console.log("\nLocation: " + response.data[0].venue.city + ", " + response.data[0].venue.region)
     var date = response.data[0].datetime;
     var time = moment(date).format('MM/DD/YYYY');
-    console.log("Date: " + time);
+    console.log("\nDate: " + time);
+}
 
 
   }).catch(function (error) {
@@ -149,20 +158,18 @@ var doWhatItSays = function () {
     var output = data.split(",");
     console.log(output[0]);
     console.log(output[1]);
-    for (let i = 0; i < data.length; i++) {
 
-      if (output[0] === "spotify-this-song") {
-        songName = output[1]
-        console.log(songName)
-        spotifyThis();
-      } else if (output[0] === "movie-this") {
-        movieName = output[1]
-        movieThis();
-      } else if (output[0] === "concert-this") {
-        artistName = output[1]
-        console.log(artistName)
-        concertThis();
-      }
+    if (output[0] === "spotify-this-song") {
+      songName = output[1]
+      // console.log(songName)
+      spotifyThis();
+    } else if (output[0] === "movie-this") {
+      movieName = output[1]
+      movieThis();
+    } else if (output[0] === "concert-this") {
+      artistName = output[1]
+      // console.log(artistName)
+      concertThis();
     }
   })
 }
@@ -176,6 +183,7 @@ switch (selector) {
   case "spotify-this-song":
     spotifyThis();
     break;
+
   case "movie-this":
     movieThis();
     break;
@@ -185,4 +193,10 @@ switch (selector) {
   case "do-what-it-says":
     doWhatItSays();
     break;
+  default:
+    console.log("Please choose a correct function")
+    console.log("spotify-this-song")
+    console.log("movie-this")
+    console.log("concert-this")
+    console.log("do-what-it-says")
 }
