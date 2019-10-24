@@ -6,3 +6,4 @@
 **Find a concert!**
 **Find any song, artist, or album!**
 **Search for any movie** 
+![spotify gif] (spotify-this-gif.gif)
